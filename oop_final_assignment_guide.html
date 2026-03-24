@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OOP Final Assignment Guide</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --border: #e5e7eb;
+      --good: #065f46;
+      --warn: #92400e;
+      --code: #111827;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      color: white;
+      padding: 40px 20px;
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    h1, h2, h3 { margin-top: 0; }
+    h1 { font-size: 2.2rem; }
+    h2 {
+      font-size: 1.5rem;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 8px;
+      margin-top: 36px;
+    }
+
+    h3 { color: var(--accent); margin-top: 24px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+    }
+
+    .pill {
+      display: inline-block;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      margin: 4px 6px 0 0;
+    }
+
+    code {
+      background: #eef2ff;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-family: Consolas, monospace;
+    }
+
+    pre {
+      background: var(--code);
+      color: #f9fafb;
+      padding: 16px;
+      border-radius: 14px;
+      overflow-x: auto;
+      border: 1px solid #1f2937;
+    }
+
+    ul {
+      padding-left: 22px;
+    }
+
+    .note {
+      border-left: 5px solid var(--accent);
+      background: #eff6ff;
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin: 14px 0;
+    }
+
+    .warn {
+      border-left: 5px solid #f59e0b;
+      background: #fffbeb;
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin: 14px 0;
+    }
+
+    .good {
+      border-left: 5px solid #10b981;
+      background: #ecfdf5;
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin: 14px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f3f4f6;
+    }
+
+    footer {
+      color: var(--muted);
+      text-align: center;
+      padding: 32px 16px 48px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>OOP Final Assignment Guide</h1>
+      <p>A clear study guide for building a library-style C++ program that handles <strong>students</strong>, <strong>courses</strong>, and <strong>programs</strong>.</p>
+      <div>
+        <span class="pill">Aggregation</span>
+        <span class="pill">Strings</span>
+        <span class="pill">Containers</span>
+        <span class="pill">File I/O</span>
+        <span class="pill">Error Handling</span>
+        <span class="pill">Algorithms</span>
+        <span class="pill">Lambda</span>
+        <span class="pill">Function Pointer</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <h2>1. Big Picture of the Assignment</h2>
+      <div class="card">
+        <p>Your assignment is not just about separate topics. It is one full system.</p>
+        <p>You are likely building a program where:</p>
+        <ul>
+          <li>A <code>Student</code> stores student information</li>
+          <li>A <code>Course</code> stores course information</li>
+          <li>A <code>Program</code> groups related courses</li>
+          <li>The system reads and writes data using files</li>
+          <li>STL containers store objects</li>
+          <li>Algorithms help search, display, or sort data</li>
+          <li>Error handling protects the program from bad input or missing files</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>2. Suggested Class Design</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Student</h3>
+          <p>Stores student details and maybe the courses they are taking.</p>
+        </div>
+        <div class="card">
+          <h3>Course</h3>
+          <p>Stores course details and maybe a list of students enrolled.</p>
+        </div>
+        <div class="card">
+          <h3>Program</h3>
+          <p>Stores program details and a list of courses inside that program.</p>
+        </div>
+      </div>
+
+      <pre><code>class Course;
+class Program;
+
+class Student {
+    std::string name;
+    int studentId;
+    std::vector&lt;Course*&gt; courses;
+};
+
+class Course {
+    std::string code;
+    std::string title;
+    std::vector&lt;Student*&gt; students;
+};
+
+class Program {
+    std::string name;
+    std::vector&lt;Course*&gt; courses;
+};</code></pre>
+
+      <div class="note">
+        These relationships are a good example of <strong>aggregation</strong> because one class keeps pointers or references to objects that can still exist on their own.
+      </div>
+    </section>
+
+    <section>
+      <h2>3. Aggregation</h2>
+      <div class="card">
+        <p><strong>Aggregation</strong> means one class has another object, but does not fully own its lifetime.</p>
+        <p>Example: a <code>Course</code> has <code>Student</code> objects, but the students still exist separately.</p>
+      </div>
+
+      <pre><code>class Course {
+    std::string courseName;
+    std::vector&lt;Student*&gt; students;
+};</code></pre>
+
+      <table>
+        <tr>
+          <th>Concept</th>
+          <th>Meaning</th>
+        </tr>
+        <tr>
+          <td>Aggregation</td>
+          <td>A class stores another object by pointer or reference, but the object can exist independently.</td>
+        </tr>
+        <tr>
+          <td>Why useful</td>
+          <td>Prevents unnecessary copying and shows relationships clearly.</td>
+        </tr>
+      </table>
+
+      <div class="warn">
+        Be careful with pointers. If an object is destroyed, a stored pointer to it becomes invalid.
+      </div>
+    </section>
+
+    <section>
+      <h2>4. Strings</h2>
+      <div class="card">
+        <p>You will use <code>std::string</code> for names, IDs, program names, course codes, and file content.</p>
+      </div>
+
+      <pre><code>std::string studentName = "Tom";
+std::string courseCode = "OOP345";
+
+if (studentName == "Tom") {
+    std::cout &lt;&lt; "Match found" &lt;&lt; std::endl;
+}</code></pre>
+
+      <h3>Common String Operations</h3>
+      <pre><code>name.length();
+name.empty();
+name += " Huynh";
+getline(std::cin, name);</code></pre>
+
+      <div class="good">
+        Good habit: pass strings as <code>const std::string&amp;</code> when you do not want to copy them.
+      </div>
+
+      <pre><code>void displayName(const std::string&amp; name) {
+    std::cout &lt;&lt; name &lt;&lt; std::endl;
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>5. Containers</h2>
+      <div class="card">
+        <p>The most likely container for this assignment is <code>std::vector</code>.</p>
+      </div>
+
+      <pre><code>std::vector&lt;Student&gt; students;
+std::vector&lt;Course*&gt; courseList;</code></pre>
+
+      <h3>Vector of Objects vs Vector of Pointers</h3>
+      <table>
+        <tr>
+          <th>Type</th>
+          <th>Meaning</th>
+        </tr>
+        <tr>
+          <td><code>std::vector&lt;Student&gt;</code></td>
+          <td>Stores full student objects</td>
+        </tr>
+        <tr>
+          <td><code>std::vector&lt;Student*&gt;</code></td>
+          <td>Stores addresses of existing student objects</td>
+        </tr>
+      </table>
+
+      <pre><code>students.push_back(Student("Tom", 1001));
+courseList.push_back(&amp;oopCourse);</code></pre>
+
+      <div class="note">
+        In aggregation, pointer containers are common because you usually want to connect existing objects rather than duplicate them.
+      </div>
+    </section>
+
+    <section>
+      <h2>6. File I/O</h2>
+      <div class="card">
+        <p>Use file I/O to read student, course, or program data from a file and maybe save updated results.</p>
+      </div>
+
+      <pre><code>#include &lt;fstream&gt;
+
+std::ifstream file("students.txt");
+if (!file) {
+    std::cout &lt;&lt; "Cannot open file" &lt;&lt; std::endl;
+}</code></pre>
+
+      <h3>Reading Line by Line</h3>
+      <pre><code>std::string line;
+while (getline(file, line)) {
+    std::cout &lt;&lt; line &lt;&lt; std::endl;
+}</code></pre>
+
+      <h3>Writing to a File</h3>
+      <pre><code>std::ofstream outFile("output.txt");
+outFile &lt;&lt; "Student saved" &lt;&lt; std::endl;</code></pre>
+
+      <div class="warn">
+        Always check whether the file opened successfully before using it.
+      </div>
+    </section>
+
+    <section>
+      <h2>7. Error Handling</h2>
+      <div class="card">
+        <p>Error handling keeps your program safe when something goes wrong.</p>
+      </div>
+
+      <ul>
+        <li>File not found</li>
+        <li>Invalid mark</li>
+        <li>Student not found</li>
+        <li>Bad input data</li>
+      </ul>
+
+      <pre><code>if (mark &lt; 0 || mark &gt; 100) {
+    throw std::invalid_argument("Mark must be between 0 and 100");
+}</code></pre>
+
+      <pre><code>try {
+    throw std::runtime_error("File error");
+}
+catch (const std::exception&amp; e) {
+    std::cout &lt;&lt; e.what() &lt;&lt; std::endl;
+}</code></pre>
+
+      <div class="good">
+        Use simple <code>if</code> checks for small problems, and use <code>throw</code> when you want the error to be handled elsewhere.
+      </div>
+    </section>
+
+    <section>
+      <h2>8. Algorithms</h2>
+      <div class="card">
+        <p>STL algorithms help you work with containers in a cleaner way.</p>
+      </div>
+
+      <h3>Common Algorithms</h3>
+      <ul>
+        <li><code>std::for_each</code></li>
+        <li><code>std::find_if</code></li>
+        <li><code>std::sort</code></li>
+        <li><code>std::count_if</code></li>
+        <li><code>std::transform</code></li>
+      </ul>
+
+      <pre><code>std::for_each(students.begin(), students.end(), displayStudent);</code></pre>
+
+      <pre><code>auto it = std::find_if(students.begin(), students.end(),
+    [](const Student&amp; s) {
+        return s.getName() == "Tom";
+    });
+
+if (it != students.end()) {
+    std::cout &lt;&lt; "Found" &lt;&lt; std::endl;
+}</code></pre>
+
+      <div class="note">
+        Important rule: if <code>find_if</code> does not find anything, it returns <code>container.end()</code>.
+      </div>
+    </section>
+
+    <section>
+      <h2>9. Lambda</h2>
+      <div class="card">
+        <p>A lambda is a small unnamed function written directly where you use it.</p>
+      </div>
+
+      <pre><code>[](const Student&amp; s) {
+    return s.getMark() &gt;= 50;
+}</code></pre>
+
+      <h3>Normal Function vs Lambda</h3>
+      <pre><code>bool isPassing(const Student&amp; s) {
+    return s.getMark() &gt;= 50;
+}
+
+auto it = std::find_if(students.begin(), students.end(), isPassing);</code></pre>
+
+      <pre><code>auto it = std::find_if(students.begin(), students.end(),
+    [](const Student&amp; s) {
+        return s.getMark() &gt;= 50;
+    });</code></pre>
+
+      <div class="good">
+        Lambda is useful when the function is short and only needed in one place.
+      </div>
+    </section>
+
+    <section>
+      <h2>10. Function Pointer</h2>
+      <div class="card">
+        <p>A function pointer stores the address of a function so you can pass or call it later.</p>
+      </div>
+
+      <pre><code>void greet() {
+    std::cout &lt;&lt; "Hello" &lt;&lt; std::endl;
+}
+
+void (*fp)() = greet;
+fp();</code></pre>
+
+      <pre><code>void displayStudent(const Student&amp; s) {
+    s.display();
+}
+
+std::for_each(students.begin(), students.end(), displayStudent);</code></pre>
+
+      <table>
+        <tr>
+          <th>Type</th>
+          <th>Meaning</th>
+        </tr>
+        <tr>
+          <td>Regular function</td>
+          <td>A normal named function</td>
+        </tr>
+        <tr>
+          <td>Function pointer</td>
+          <td>A variable that stores the address of a function</td>
+        </tr>
+        <tr>
+          <td>Lambda</td>
+          <td>An unnamed inline function</td>
+        </tr>
+      </table>
+    </section>
+
+    <section>
+      <h2>11. Mini Example</h2>
+      <div class="card">
+        <p>This small example connects the main ideas together.</p>
+      </div>
+
+      <pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include &lt;algorithm&gt;
+
+class Student {
+    std::string name;
+    int id;
+public:
+    Student(std::string n, int i) : name(n), id(i) {}
+
+    std::string getName() const { return name; }
+    int getId() const { return id; }
+
+    void display() const {
+        std::cout &lt;&lt; id &lt;&lt; " - " &lt;&lt; name &lt;&lt; std::endl;
+    }
+};
+
+class Course {
+    std::string code;
+    std::vector&lt;Student*&gt; students;
+public:
+    Course(std::string c) : code(c) {}
+
+    void addStudent(Student&amp; s) {
+        students.push_back(&amp;s);
+    }
+
+    void displayStudents() const {
+        std::for_each(students.begin(), students.end(),
+            [](Student* s) {
+                s-&gt;display();
+            });
+    }
+};
+
+int main() {
+    Student s1("Tom", 1001);
+    Student s2("Anna", 1002);
+
+    Course oop("OOP345");
+    oop.addStudent(s1);
+    oop.addStudent(s2);
+
+    oop.displayStudents();
+}</code></pre>
+
+      <div class="note">
+        This example uses classes, strings, vector, aggregation, algorithm, and lambda together.
+      </div>
+    </section>
+
+    <section>
+      <h2>12. Common Mistakes</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>1. Mixing objects and pointers</h3>
+          <p>Make sure you know whether your vector stores actual objects or addresses.</p>
+        </div>
+        <div class="card">
+          <h3>2. Forgetting <code>.end()</code> check</h3>
+          <p>After <code>find_if</code>, always compare with <code>end()</code>.</p>
+        </div>
+        <div class="card">
+          <h3>3. Bad file handling</h3>
+          <p>Always check if the file was opened before reading or writing.</p>
+        </div>
+        <div class="card">
+          <h3>4. Dangling pointers</h3>
+          <p>Do not store pointers to objects that no longer exist.</p>
+        </div>
+        <div class="card">
+          <h3>5. Copying too much</h3>
+          <p>Use references like <code>const std::string&amp;</code> or <code>const Student&amp;</code> when possible.</p>
+        </div>
+        <div class="card">
+          <h3>6. Long manual loops</h3>
+          <p>Use STL algorithms when the assignment expects them.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>13. What to Study First</h2>
+      <div class="card">
+        <ol>
+          <li>Class design and aggregation</li>
+          <li>Vector of objects vs vector of pointers</li>
+          <li>File reading into objects</li>
+          <li>Algorithms like <code>for_each</code> and <code>find_if</code></li>
+          <li>Lambda</li>
+          <li>Function pointer</li>
+          <li>Error handling</li>
+        </ol>
+      </div>
+    </section>
+
+    <section>
+      <h2>14. Final Reminder</h2>
+      <div class="good">
+        Do not study each topic alone. Practice them as one complete system: classes + containers + files + algorithms + safe handling.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    OOP Final Assignment Guide - built as a clean HTML reference page for study and review.
+  </footer>
+</body>
+</html>
